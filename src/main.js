@@ -1,8 +1,22 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+Vue.use(ElementUI);
+
+import router from "./plugins/router.js";
+
+import Vant from "vant";
+import "vant/lib/index.css";
+Vue.use(Vant);
+
+import axios from "axios";
+Vue.prototype.$axios = axios;
 
 new Vue({
   render: h => h(App),
-}).$mount('#app')
+  router,
+}).$mount("#app");
