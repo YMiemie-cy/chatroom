@@ -341,15 +341,7 @@
                   <!-- Card START -->
                   <div class="card overflow-hidden">
                     <!-- Cover image -->
-                    <div
-                      class="h-50px"
-                      style="
-                        background-image: url(../assets/img/011.jpg);
-                        background-position: center;
-                        background-size: cover;
-                        background-repeat: no-repeat;
-                      "
-                    ></div>
+                    <div class="h-50px avatar-back"></div>
                     <!-- Card body START -->
                     <div class="card-body pt-0">
                       <div class="text-center">
@@ -358,7 +350,8 @@
                           <a href="#!">
                             <img
                               class="avatar-img rounded border border-white border-3"
-                              src="../assets/img/07.jpg"
+                              :src="userInformation.imgUrl === '' ? src : userInformation.imgUrl"
+                              data-src=""
                               alt=""
                             />
                           </a>
@@ -394,8 +387,8 @@
                           <div class="vr"></div>
                           <!-- User stat item -->
                           <div>
-                            <h6 class="mb-0">{{ userInformation.friends }}</h6>
-                            <small>Friends</small>
+                            <h6 class="mb-0">{{ userInformation.comments }}</h6>
+                            <small>Comments</small>
                           </div>
                         </div>
                         <!-- User stat END -->
@@ -2083,10 +2076,11 @@ export default {
         signature: "我是个性签名",
         post: "111",
         like: "222",
-        friends: "333",
-        imgUrl: "xxxxxxxx",
+        comments: "333",
+        imgUrl: "",
       },
       news: [],
+      src: require("../assets/img/07.jpg"),
     };
   },
   components: {
@@ -2298,6 +2292,12 @@ export default {
         }
       }
     }
+  }
+  .avatar-back {
+    background-image: url(../assets/img/011.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 }
 </style>

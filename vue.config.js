@@ -13,6 +13,14 @@ module.exports = {
           "^/news": "",
         },
       },
+
+      "/img": {
+        target: "https://jsonplaceholder.typicode.com",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/img": "",
+        },
+      },
     },
   },
 };

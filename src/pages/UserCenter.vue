@@ -39,6 +39,21 @@
             <el-input v-model="userInformation.signature" autocomplete="off"></el-input>
           </el-form-item>
 
+          <div class="avatar-upload">
+            <label for="upload" class="custom-file-upload">
+              <i class="fa fa-cloud-upload"></i>
+              头像上传
+            </label>
+            <input
+              id="upload"
+              type="file"
+              @change="handleUpload"
+              style="display: none"
+              accept="image/*"
+              ref="uploadInput"
+            />
+          </div>
+
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -127,6 +142,7 @@ export default {
         label: [{ validator: validateLabel, trigger: "blur" }],
         signature: [{ validator: validateSignature, trigger: "blur" }],
       },
+      fileList: [],
     };
   },
   methods: {
@@ -148,6 +164,16 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    handleUpload() {
+      const file = this.$refs.uploadInput.files[0]; // 获取选择的文件对象
+      const reader = new FileReader(); // 创建FileReader对象
+      reader.readAsDataURL(file); // 读取文件为DataURL
+      reader.onload = () => {
+        const imgData = reader.result; // 获取DataURL
+        console.log(imgData);
+        this.userInformation.imgUrl = imgData;
+      };
     },
   },
 };
@@ -216,7 +242,7 @@ export default {
     .userForm {
       border-radius: 5px;
       width: 500px;
-      height: 600px;
+      height: 648px;
       background-color: white;
       box-sizing: border-box;
       padding: 50px 30px 30px 15px;
@@ -226,6 +252,27 @@ export default {
         height: 100%;
       }
     }
+  }
+  .avatar-upload {
+    // margin-bottom: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .custom-file-upload {
+      border: 1px solid #ccc;
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
+  :deep(.el-form-item__content) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 !important;
   }
 }
 </style>
