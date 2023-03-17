@@ -490,50 +490,6 @@
               </div>
               <!-- Share feed toolbar START -->
               <ul class="nav nav-pills nav-stack small fw-normal">
-                <li class="nav-item">
-                  <a
-                    class="nav-link bg-light py-1 px-2 mb-0"
-                    href="#!"
-                    data-bs-toggle="modal"
-                    data-bs-target="#feedActionPhoto"
-                  >
-                    <i class="bi bi-image-fill text-success pe-2"></i>
-                    Photo
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link bg-light py-1 px-2 mb-0"
-                    href="#!"
-                    data-bs-toggle="modal"
-                    data-bs-target="#feedActionVideo"
-                  >
-                    <i class="bi bi-camera-reels-fill text-info pe-2"></i>
-                    Video
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    href="#"
-                    class="nav-link bg-light py-1 px-2 mb-0"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalCreateEvents"
-                  >
-                    <i class="bi bi-calendar2-event-fill text-danger pe-2"></i>
-                    Event
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link bg-light py-1 px-2 mb-0"
-                    href="#!"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalCreateFeed"
-                  >
-                    <i class="bi bi-emoji-smile-fill text-warning pe-2"></i>
-                    Feeling /Activity
-                  </a>
-                </li>
                 <li class="nav-item dropdown ms-lg-auto">
                   <a
                     class="nav-link bg-light py-1 px-2 mb-0"
@@ -542,7 +498,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <i class="bi bi-three-dots"></i>
+                    发布
                   </a>
                   <!-- Dropdown menu -->
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="feedActionShare">
@@ -653,8 +609,8 @@
                   I'm thrilled to share that I've completed a graduate certificate course in project
                   management with the president's honor roll.
                 </p>
-                <!-- Card img -->
-                <img class="card-img" src="../assets/img/017.jpg" alt="Post" />
+                <!-- Card img
+                <img class="card-img" src="../assets/img/017.jpg" alt="Post" /> -->
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
                   <li class="nav-item">
@@ -670,8 +626,8 @@
                     </a>
                   </li>
                   <!-- Card share action START -->
-                  <li class="nav-item dropdown ms-sm-auto">
-                    <a
+                  <!-- <li class="nav-item dropdown ms-sm-auto"> -->
+                  <!-- <a
                       class="nav-link mb-0"
                       href="#"
                       id="cardShareAction"
@@ -680,9 +636,9 @@
                     >
                       <i class="bi bi-reply-fill flip-horizontal ps-1"></i>
                       Share(3)
-                    </a>
-                    <!-- Card share action dropdown menu -->
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
+                    </a> -->
+                  <!-- Card share action dropdown menu -->
+                  <!-- <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
                       <li>
                         <a class="dropdown-item" href="#">
                           <i class="bi bi-envelope fa-fw pe-2"></i>
@@ -716,8 +672,8 @@
                           Share to News Feed
                         </a>
                       </li>
-                    </ul>
-                  </li>
+                    </ul> -->
+                  <!-- </li> -->
                   <!-- Card share action END -->
                 </ul>
                 <!-- Feed react END -->
@@ -759,19 +715,12 @@
                         <div class="bg-light rounded-start-top-0 p-3 rounded">
                           <div class="d-flex justify-content-between">
                             <h6 class="mb-1"><a href="#!">Frances Guerrero</a></h6>
-                            <small class="ms-2">5hr</small>
                           </div>
                           <p class="small mb-0">
                             Removed demands expense account in outward tedious do. Particular way
                             thoroughly unaffected projection.
                           </p>
                         </div>
-                        <!-- Comment react -->
-                        <ul class="nav nav-divider py-2 small">
-                          <li class="nav-item"><a class="nav-link" href="#!">Like(3)</a></li>
-                          <li class="nav-item"><a class="nav-link" href="#!">Reply</a></li>
-                          <li class="nav-item"><a class="nav-link" href="#!">View 5 replies</a></li>
-                        </ul>
                       </div>
                     </div>
                     <!-- Comment item nested START -->
@@ -779,41 +728,6 @@
                     <!-- Load more replies -->
 
                     <!-- Comment item nested END -->
-                  </li>
-                  <!-- Comment item END -->
-                  <!-- Comment item START -->
-                  <li class="comment-item">
-                    <div class="d-flex">
-                      <!-- Avatar -->
-                      <div class="avatar avatar-xs">
-                        <a href="#!">
-                          <img
-                            class="avatar-img rounded-circle"
-                            src="../assets/img/05.jpg"
-                            alt=""
-                          />
-                        </a>
-                      </div>
-                      <!-- Comment by -->
-                      <div class="ms-2">
-                        <div class="bg-light p-3 rounded">
-                          <div class="d-flex justify-content-between">
-                            <h6 class="mb-1"><a href="#!">Frances Guerrero</a></h6>
-                            <small class="ms-2">4min</small>
-                          </div>
-                          <p class="small mb-0">
-                            Removed demands expense account in outward tedious do. Particular way
-                            thoroughly unaffected projection.
-                          </p>
-                        </div>
-                        <!-- Comment react -->
-                        <ul class="nav nav-divider pt-2 small">
-                          <li class="nav-item"><a class="nav-link" href="#!">Like(1)</a></li>
-                          <li class="nav-item"><a class="nav-link" href="#!">Reply</a></li>
-                          <li class="nav-item"><a class="nav-link" href="#!">View 6 replies</a></li>
-                        </ul>
-                      </div>
-                    </div>
                   </li>
                   <!-- Comment item END -->
                 </ul>
@@ -2172,7 +2086,6 @@ export default {
         friends: "333",
         imgUrl: "xxxxxxxx",
       },
-
       news: [],
     };
   },
