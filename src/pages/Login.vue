@@ -59,7 +59,8 @@
 </template>
 
 <script>
-// import { getLogin, postReg } from '../api';
+import { getLogin, postReg} from '../api';
+
 import emailjs from '@emailjs/browser';
 
 export default {
@@ -100,6 +101,7 @@ export default {
     };
 
     return {
+    
       show: true,
       loginList: {
         username: '',
@@ -116,11 +118,14 @@ export default {
         email: [{ required: true, validator: validateEmail, trigger: 'blur' }],
       },
       codeText: '发送验证码',
-      code: ''
+      code: '',
+
+      articleArray: [],
     };
   },
   created() {},
   mounted() {
+ 
   
   },
   methods: {
@@ -129,9 +134,13 @@ export default {
         username: this.loginList.username,
         password: this.loginList.password,
       });
+
+      console.log(res);
+      
       if(res.data.code === 200){
-        const obj = {username: this.loginList.username,token: res.data.data.token};
-        localStorage.setItem("token",JSON.stringify(obj));
+
+        const obj = {username: this.loginList.username,token: res.data.data};
+        localStorage.setItem("user",JSON.stringify(obj));
         if(this.loginList.username  === 'admin'){
           this.$router.push('/adminHome');
         }else{
@@ -141,8 +150,9 @@ export default {
         this.loginList.username = "";
         this.loginList.password = "";
       }
+      
     },
-     reg(formName) {
+    async reg(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           const res = await postReg({

@@ -1,24 +1,13 @@
 import axios from "../plugins/axios";
-import qs from "qs";
+const serverBaseUrl = "http://localhost:8000/api";
 
 //登录
-// export const getLogin = async ({
-//     username,
-//     password
-//   }) =>
-//   axios.get("/login?apipost_id=e2c35b", {
-//     params: {
-//       username,
-//       password
-//     }
-//   });
-
 export const getLogin = async ({ username, password }) =>
   axios({
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
-    data: qs.stringify({ username: username, password: password }),
-    url: "/login",
+    data: { username: username, password: password },
+    url: `${serverBaseUrl}/login`,
   });
 
 //注册
@@ -26,31 +15,16 @@ export const postReg = async ({ username, password }) =>
   axios({
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
-    data: qs.stringify({ username: username, password: password }),
+    data: { username: username, password: password },
     url: "/register",
   });
 
-// 获取用户信息
-export const getUserInfo = async (username) =>
-  axios.get("user/findAllTickByName", {
-    params: { username: username },
-  });
-
 // 获取用户列表
-export const getUserList = async () => axios.get("user/findAllTick");
+export const getUserList = async () => axios.get(`${serverBaseUrl}/article-list`);
 
-// 电影票购买
-export const buyMovies = async (username, tickInformation) => {
-  let data1 = JSON.stringify({
-    username: username,
-    tickInformation: [tickInformation],
-  });
-  console.log("data1", data1);
-  return axios({
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    // headers: { "content-type": "application/x-www-form-urlencoded" },
-    data: data1,
-    url: "/user/ByTick",
-  });
-};
+// 获取用户发布帖子数
+export const getACount = async userId =>
+  axios.get(`${serverBaseUrl}/publish-count?userId=${userId}`);
+
+// 获取用户被点赞数
+export const getGCount = async userId => axios.get(`${serverBaseUrl}/good-invoke?userId=${userId}`);

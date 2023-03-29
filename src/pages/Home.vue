@@ -679,13 +679,25 @@
                     </a>
                   </div>
                   <!-- Comment box -->
-                  <form class="w-100">
+                  <form class="w-100 commentForm">
                     <textarea
                       data-autoresize=""
-                      class="form-control pe-4 bg-light"
+                      class="form-control pe-4 bg-light commentText"
                       rows="1"
                       placeholder="Add a comment..."
                     ></textarea>
+
+                    <a
+                      data-v-5a90ec03=""
+                      href="javaScript::void(0);"
+                      id="feedActionShare"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      class="nav-link bg-light py-1 px-2 mb-0 commentBtn"
+                      @click="commentRelease"
+                    >
+                      发布
+                    </a>
                   </form>
                 </div>
                 <!-- Comment wrap START -->
@@ -2052,7 +2064,15 @@ import "../assets/js/functions.js";
 import UserCenter from "./UserCenter.vue";
 import ChatBox from "./ChatBox.vue";
 
-import { getNews } from "../api";
+import {
+  getNews,
+  getACount,
+  getGCount,
+  articlePublish,
+  getArticleList,
+  publishReview,
+  getUserList,
+} from "../api";
 
 window.dataLayer = window.dataLayer || [];
 
@@ -2067,6 +2087,7 @@ export default {
   data() {
     return {
       userInformation: {
+        id: "",
         nickName: "LingYi",
         school: "电子科技大学",
         specialized: "计算机科学与技术",
@@ -2091,7 +2112,15 @@ export default {
     const res = await getNews();
     this.news = res.data.T1348647853363[0].ads;
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      this.getUser();
+      this.totalPosts();
+      this.numberOfLikes();
+    },
     linking() {
       const loading = document.querySelector(".loveBox");
       loading.style.display = "flex";
@@ -2115,6 +2144,69 @@ export default {
     closeChatBox() {
       const chatBox = this.$refs.chatBox;
       chatBox.style.display = "none";
+    },
+    commentRelease() {},
+
+    // 获取用户信息
+    getUser() {
+      this.userInformation = JSON.parse(localStorage.getItem("user")).token;
+      console.log(this.userInformation);
+    },
+
+    // 文章发布
+    async articleRelease() {
+      const res = await articlePublish(1, "sssssss");
+      if (res) {
+        if (res.data.code === 200) {
+          // 写入成功
+          console.log("写入成功", res.data);
+          // 请求列表页数据 渲染页面
+          this.getArticleList();
+        }
+      }
+    },
+
+    // 获取帖子列表
+    async getAListOfPosts() {
+      const res = await getArticleList();
+      if (res.data.code === 200) {
+        this.articleArray = res.data.data;
+        console.log("获取帖子列表", this.articleArray);
+      } else {
+        console.log("列表页请求失败-list");
+      }
+    },
+
+    // 获取用户发布帖子数
+    async totalPosts(userId) {
+      const res = await getACount(1);
+      if (res.data.code === 200) {
+        console.log("获取用户发布帖子数", res.data.data[0].count);
+        this.userInformation.post = res.data.data[0].count;
+      } else {
+        console.log("列表页请求失败-p-count");
+      }
+    },
+
+    // 获取用户被点赞数
+    async numberOfLikes(userId) {
+      const res = await getGCount(1);
+      if (res.data.code === 200) {
+        console.log("获取用户被点赞数", res.data.data[0].count);
+        this.userInformation.like = res.data.data[0].count;
+      } else {
+        console.log("列表页请求失败g-count");
+      }
+    },
+
+    // 发布评论
+    async postComments() {
+      const res = await publishReview(1, 1, "this is a review");
+      if (res.data.code === 200) {
+        console.log("发布评论", res.data);
+      } else {
+        console.log("列表页请求失败");
+      }
     },
   },
 };
@@ -2290,6 +2382,21 @@ export default {
           box-sizing: border-box;
           // padding: 0 50px 0 30px;
         }
+      }
+    }
+    .commentForm {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .commentText {
+        width: 400px;
+        margin-right: 10px;
+      }
+      .commentBtn {
+        width: 50px;
+        height: auto;
+        border-radius: 4px;
+        text-align: center;
       }
     }
   }
