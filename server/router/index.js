@@ -18,6 +18,7 @@ router.post("/register", userHandler.reg);
 router.post("/login", userHandler.login);
 // --> 更新用户数据
 router.post("/update", userHandler.userUpdate);
+router.get("/user-list", userHandler.userList);
 /** user end **/
 
 /** article start **/
@@ -29,12 +30,18 @@ router.get("/article-list", articleHandler.articleList);
 router.get("/good-invoke", articleHandler.articleGoodCount);
 // 发布数
 router.get("/publish-count", articleHandler.articleCountByUserId);
+
+// 点赞
+router.get("/post-good-add", articleHandler.goodCountForArticle);
 /** article end **/
 
-/** review start **/
-router.post("/review-add", reviewHandler.reviewInsert);
+/** review start **/ router.post("/review-add", reviewHandler.reviewInsert);
 router.get("/review-list-by-userId", reviewHandler.reviewListByUserId);
 router.get("/review-list-by-articleId", reviewHandler.reviewListByArticleId);
+
+router.get("/review-all-count-by-aid", reviewHandler.postReviewCount);
+
+router.get("/review-list-by-post-id", reviewHandler.reviewListByPostId);
 /** review end**/
 
 /**  挂载路由 end **/

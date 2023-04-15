@@ -19,3 +19,6 @@ export const publishReview = async (userId, articleId, content) =>
     data: { userId: userId, articleId: articleId, content: content },
     url: `${serverBaseUrl}/review-add`,
   });
+
+// 获取电影信息列表
+export const getNews = async () => axios.get("/news/nc/article/headline/T1348647853363/0-40.html");

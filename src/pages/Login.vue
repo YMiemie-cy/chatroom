@@ -134,19 +134,12 @@ export default {
         username: this.loginList.username,
         password: this.loginList.password,
       });
-
-      console.log(res);
       
       if(res.data.code === 200){
 
         const obj = {username: this.loginList.username,token: res.data.data};
         localStorage.setItem("user",JSON.stringify(obj));
-        if(this.loginList.username  === 'admin'){
-          this.$router.push('/adminHome');
-        }else{
-
-          this.$router.push('/home/index');
-        }
+     
         this.loginList.username = "";
         this.loginList.password = "";
       }
@@ -159,6 +152,7 @@ export default {
             username: this.ruleForm.email,
             password: this.ruleForm.pass,
           });
+          console.log('reg',res)
           this.show = true;
           this.$alert('注册成功', '消息提示', {
           confirmButtonText: '确定',

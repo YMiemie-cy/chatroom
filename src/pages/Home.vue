@@ -105,6 +105,7 @@
                     </h6>
                     <a class="small" href="#">Clear all</a>
                   </div>
+
                   <div class="card-body p-0">
                     <ul class="list-group list-group-flush list-unstyled p-2">
                       <!-- Notif item -->
@@ -358,15 +359,15 @@
                         </div>
                         <!-- Info -->
                         <h5 class="mb-0">
-                          <a href="#!">{{ userInformation.nickName }}</a>
+                          <a href="#!">{{ userInformation.nickname }}</a>
                         </h5>
-                        <small>{{ userInformation.label }}</small>
+                        <small>{{ userInformation.tag }}</small>
                         <small style="display: block">{{ userInformation.school }}</small>
-                        <small style="display: block">{{ userInformation.specialized }}</small>
+                        <small style="display: block">{{ userInformation.major }}</small>
                         <small style="display: block">{{ userInformation.age }}</small>
-                        <small style="display: block">{{ userInformation.gender }}</small>
+                        <small style="display: block">{{ userInformation.sex }}</small>
                         <p class="mt-3">
-                          {{ userInformation.signature }}
+                          {{ userInformation.selfTag }}
                         </p>
 
                         <!-- User stat START -->
@@ -374,21 +375,21 @@
                           <!-- User stat item -->
                           <div>
                             <h6 class="mb-0">{{ userInformation.post }}</h6>
-                            <small>Post</small>
+                            <small>评论数</small>
                           </div>
                           <!-- Divider -->
                           <div class="vr"></div>
                           <!-- User stat item -->
                           <div>
                             <h6 class="mb-0">{{ userInformation.like }}</h6>
-                            <small>Like</small>
+                            <small>被赞数</small>
                           </div>
                           <!-- Divider -->
                           <div class="vr"></div>
                           <!-- User stat item -->
                           <div>
                             <h6 class="mb-0">{{ userInformation.comments }}</h6>
-                            <small>Comments</small>
+                            <small>评论数</small>
                           </div>
                         </div>
                         <!-- User stat END -->
@@ -402,7 +403,7 @@
                         <li class="nav-item">
                           <a class="nav-link" href="javaScript:void(0);" @click="linking">
                             <img class="me-2 h-20px fa-fw" src="../assets/img/love.svg" alt="" />
-                            <span>Linking</span>
+                            <span v-relative>连接</span>
                           </a>
                         </li>
                         <li class="nav-item">
@@ -412,7 +413,7 @@
                               src="../assets/img/person-outline-filled.svg"
                               alt=""
                             />
-                            <span>Personal Centre</span>
+                            <span>用户中心</span>
                           </a>
                         </li>
 
@@ -423,7 +424,7 @@
                               src="../assets/img/chat-outline-filled.svg"
                               alt=""
                             />
-                            <span>Groups</span>
+                            <span>聊天室</span>
                           </a>
                         </li>
 
@@ -434,7 +435,7 @@
                               src="../assets/img/cog-outline-filled.svg"
                               alt=""
                             />
-                            <span>Settings</span>
+                            <span>设置</span>
                           </a>
                         </li>
                       </ul>
@@ -477,7 +478,8 @@
                     class="form-control pe-4 border-0"
                     rows="2"
                     data-autoresize=""
-                    placeholder="Share your thoughts..."
+                    placeholder="分享你的故事..."
+                    v-model="content"
                   ></textarea>
                 </form>
               </div>
@@ -486,37 +488,14 @@
                 <li class="nav-item dropdown ms-lg-auto">
                   <a
                     class="nav-link bg-light py-1 px-2 mb-0"
-                    href="#"
+                    href="javaScript:void(0);"
                     id="feedActionShare"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    @click="publishHandler"
                   >
                     发布
                   </a>
-                  <!-- Dropdown menu -->
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="feedActionShare">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bi bi-envelope fa-fw pe-2"></i>
-                        Create a poll
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bi bi-bookmark-check fa-fw pe-2"></i>
-                        Ask a question
-                      </a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider" />
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bi bi-pencil-square fa-fw pe-2"></i>
-                        Help
-                      </a>
-                    </li>
-                  </ul>
                 </li>
               </ul>
               <!-- Share feed toolbar END -->
@@ -524,26 +503,39 @@
             <!-- Share feed END -->
 
             <!-- Card feed item START -->
-            <div class="card">
+            <div class="card" v-for="postItem in postList" :key="postItem.id">
               <!-- Card header START -->
               <div class="card-header border-0 pb-0">
                 <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <!-- Avatar -->
-                    <div class="avatar avatar-story me-2">
-                      <a href="#!">
-                        <img class="avatar-img rounded-circle" src="../assets/img/04.jpg" alt="" />
-                      </a>
-                    </div>
-                    <!-- Info -->
-                    <div>
-                      <div class="nav nav-divider">
-                        <h6 class="nav-item card-title mb-0"><a href="#!">Lori Ferguson</a></h6>
-                        <span class="nav-item small">2hr</span>
+                  <!-- 遍历用户数组 比对帖子id<userId>和用户id<id>是否相同如果相同就显示 -->
+
+                  <div class="user-wrapper" v-for="userItem in userList" :key="userItem.id">
+                    <div v-if="postItem.userId == userItem.id" class="d-flex align-items-center">
+                      <!-- Avatar -->
+                      <div class="avatar avatar-story me-2">
+                        <a href="#!">
+                          <img
+                            class="avatar-img rounded-circle"
+                            :src="userItem.imgUrl"
+                            alt="发帖人头像"
+                          />
+                        </a>
                       </div>
-                      <p class="mb-0 small">Web Developer at Webestica</p>
+
+                      <!-- Info -->
+                      <div>
+                        <div class="nav nav-divider">
+                          <!-- 用户昵称 -->
+                          <h6 class="nav-item card-title mb-0">
+                            <a href="#!">{{ userItem.nickname }}</a>
+                          </h6>
+                        </div>
+                        <!--- 用户标签 -->
+                        <p class="mb-0 small">{{ userItem.tag }}</p>
+                      </div>
                     </div>
                   </div>
+
                   <!-- Card feed action dropdown START -->
                   <div class="dropdown">
                     <a
@@ -556,118 +548,35 @@
                       <i class="bi bi-three-dots"></i>
                     </a>
                     <!-- Card feed action dropdown menu -->
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction">
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-bookmark fa-fw pe-2"></i>
-                          Save post
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-person-x fa-fw pe-2"></i>
-                          Unfollow lori ferguson
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-x-circle fa-fw pe-2"></i>
-                          Hide post
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-slash-circle fa-fw pe-2"></i>
-                          Block
-                        </a>
-                      </li>
-                      <li>
-                        <hr class="dropdown-divider" />
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-flag fa-fw pe-2"></i>
-                          Report post
-                        </a>
-                      </li>
-                    </ul>
                   </div>
                   <!-- Card feed action dropdown END -->
                 </div>
               </div>
               <!-- Card header END -->
+
               <!-- Card body START -->
               <div class="card-body">
-                <p>
-                  I'm thrilled to share that I've completed a graduate certificate course in project
-                  management with the president's honor roll.
-                </p>
+                <p>{{ postItem.content }}</p>
                 <!-- Card img
                 <img class="card-img" src="../assets/img/017.jpg" alt="Post" /> -->
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#!">
+                    <a
+                      @click="likedHandler(postItem.id)"
+                      class="nav-link active"
+                      href="javascript:void(0);"
+                    >
                       <i class="bi bi-hand-thumbs-up-fill pe-1"></i>
-                      Liked(56)
+                      喜欢({{ postItem.goodCount }})
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
                       <i class="bi bi-chat-fill pe-1"></i>
-                      Comments(12)
+                      评论({{ postItem.reviewCount }})
                     </a>
                   </li>
-                  <!-- Card share action START -->
-                  <!-- <li class="nav-item dropdown ms-sm-auto"> -->
-                  <!-- <a
-                      class="nav-link mb-0"
-                      href="#"
-                      id="cardShareAction"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>
-                      Share(3)
-                    </a> -->
-                  <!-- Card share action dropdown menu -->
-                  <!-- <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-envelope fa-fw pe-2"></i>
-                          Send via Direct Message
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-bookmark-check fa-fw pe-2"></i>
-                          Bookmark
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-link fa-fw pe-2"></i>
-                          Copy link to post
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-share fa-fw pe-2"></i>
-                          Share post via …
-                        </a>
-                      </li>
-                      <li>
-                        <hr class="dropdown-divider" />
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-pencil-square fa-fw pe-2"></i>
-                          Share to News Feed
-                        </a>
-                      </li>
-                    </ul> -->
-                  <!-- </li> -->
-                  <!-- Card share action END -->
                 </ul>
                 <!-- Feed react END -->
                 <!-- Add comment -->
@@ -675,12 +584,17 @@
                   <!-- Avatar -->
                   <div class="avatar avatar-xs me-2">
                     <a href="#!">
-                      <img class="avatar-img rounded-circle" src="../assets/img/12.jpg" alt="" />
+                      <img
+                        class="avatar-img rounded-circle"
+                        :src="userInformation.imgUrl"
+                        alt="评论人头像变量"
+                      />
                     </a>
                   </div>
                   <!-- Comment box -->
                   <form class="w-100 commentForm">
                     <textarea
+                      v-model="postItem.reviewContent"
                       data-autoresize=""
                       class="form-control pe-4 bg-light commentText"
                       rows="1"
@@ -694,7 +608,7 @@
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                       class="nav-link bg-light py-1 px-2 mb-0 commentBtn"
-                      @click="commentRelease"
+                      @click="commentRelease(postItem.reviewContent, postItem.id)"
                     >
                       发布
                     </a>
@@ -703,28 +617,27 @@
                 <!-- Comment wrap START -->
                 <ul class="comment-wrap list-unstyled">
                   <!-- Comment item START -->
-                  <li class="comment-item">
+                  <li
+                    class="comment-item"
+                    v-for="reviewItem in postItem.reviewList"
+                    :key="reviewItem.id"
+                  >
                     <div class="d-flex position-relative">
                       <!-- Avatar -->
                       <div class="avatar avatar-xs">
                         <a href="#!">
-                          <img
-                            class="avatar-img rounded-circle"
-                            src="../assets/img/05.jpg"
-                            alt=""
-                          />
+                          <img class="avatar-img rounded-circle" :src="reviewItem.imgUrl" alt="" />
                         </a>
                       </div>
                       <div class="ms-2">
                         <!-- Comment by -->
                         <div class="bg-light rounded-start-top-0 p-3 rounded">
                           <div class="d-flex justify-content-between">
-                            <h6 class="mb-1"><a href="#!">Frances Guerrero</a></h6>
+                            <h6 class="mb-1">
+                              <a href="#!">{{ reviewItem.nickname }}</a>
+                            </h6>
                           </div>
-                          <p class="small mb-0">
-                            Removed demands expense account in outward tedious do. Particular way
-                            thoroughly unaffected projection.
-                          </p>
+                          <p class="small mb-0">{{ reviewItem.content }}</p>
                         </div>
                       </div>
                     </div>
@@ -739,6 +652,7 @@
                 <!-- Comment wrap END -->
               </div>
               <!-- Card body END -->
+
               <!-- Card footer START -->
               <div class="card-footer border-0 pt-0"></div>
               <!-- Card footer END -->
@@ -2086,19 +2000,25 @@ export default {
   name: "home",
   data() {
     return {
+      reviewContent: "", //
+      userList: [], // 用户数组
+      postList: [], // 文章数组
+
+      content: "", // 发布的文章内容字段
+
       userInformation: {
-        id: "",
-        nickName: "LingYi",
-        school: "电子科技大学",
-        specialized: "计算机科学与技术",
-        age: "22",
-        gender: "男",
-        label: "我是标签",
-        signature: "我是个性签名",
-        post: "111",
-        like: "222",
-        comments: "333",
-        imgUrl: "",
+        // id: "",
+        // nickname: "LingYi",
+        // school: "电子科技大学",
+        // specialized: "计算机科学与技术",
+        // age: "22",
+        // gender: "男",
+        // label: "我是标签",
+        // signature: "我是个性签名",
+        // post: "111",
+        // like: "222",
+        // comments: "333",
+        // imgUrl: "",
       },
       news: [],
       src: require("../assets/img/07.jpg"),
@@ -2109,17 +2029,119 @@ export default {
     ChatBox,
   },
   async created() {
+    this.init();
     const res = await getNews();
     this.news = res.data.T1348647853363[0].ads;
   },
-  mounted() {
-    this.init();
+  updated() {
+    // this.init();
   },
   methods: {
+    /** 点赞 */
+    likedHandler(id) {
+      axios({
+        url: "http://localhost:8000/api/post-good-add?id=" + id,
+      }).then(res => {
+        if (res.code === 200) {
+          console.log("点赞成功");
+          // 页面刷新
+          this.getPostList();
+        }
+      });
+    },
+    /** 点赞 */
+
+    /** 请求帖子数据 */
+    getPostList() {
+      axios({
+        url: "http://localhost:8000/api/article-list",
+      })
+        .then(res => {
+          if (res) {
+            console.log(res);
+            this.postList = [];
+            this.postList = res.data.data;
+            const tmp = res.data.data;
+            // const target = [];
+
+            for (let index = 0; index < tmp.length; index++) {
+              // 动态添加属性 reviewContent
+              this.postList[index].reviewContent = "";
+
+              console.log(tmp[index].id);
+
+              /** 请求文章发布数 */
+              axios({
+                url: `http://localhost:8000/api/review-all-count-by-aid?postId=${tmp[index].id}`,
+              }).then(res => {
+                console.log(res);
+                console.log("count: " + res.data.data[0].articleCount);
+
+                const mid = tmp[index];
+                mid.reviewCount = res.data.data[0].articleCount;
+
+                /** 请求文章评论列表 */
+                axios({
+                  url: `http://localhost:8000/api/review-list-by-post-id?postId=${tmp[index].id}`,
+                }).then(_res => {
+                  if (_res) {
+                    mid.reviewList = _res.data.data;
+                    this.$set(this.postList, index, mid);
+                  }
+                });
+                /** 请求文章评论列表 */
+              });
+              /** 请求文章发布数 */
+            }
+            // 请求用户接口
+            this.getUserList();
+          }
+        })
+        .catch(e => console.log(e));
+    },
+    /** 请求帖子数据 */
+
+    /** get user all list start */
+    getUserList() {
+      axios({
+        url: "http://localhost:8000/api/user-list",
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.userList = res.data.data;
+        }
+      });
+    },
+    /** get user all list end */
+    /*** publishHandler start */
+    publishHandler() {
+      if (!this.content) {
+        console.log("无内容");
+        return;
+      }
+
+      console.log("invoke");
+
+      axios({
+        url: "http://localhost:8000/api/article-publish",
+        method: "post",
+        data: {
+          userId: JSON.parse(window.localStorage.getItem("user")).token.id,
+          content: this.content,
+        },
+      })
+        .then(res => {
+          if (res.data.code === 200) {
+            console.log("成功");
+          } else console.log(res);
+        })
+        .catch(e => console.log(e));
+    },
+    /*** publishHandler end */
     init() {
       this.getUser();
       this.totalPosts();
       this.numberOfLikes();
+      this.getPostList();
     },
     linking() {
       const loading = document.querySelector(".loveBox");
@@ -2145,10 +2167,36 @@ export default {
       const chatBox = this.$refs.chatBox;
       chatBox.style.display = "none";
     },
-    commentRelease() {},
+    commentRelease(content, postId) {
+      if (!content) {
+        console.log("content is null");
+        return;
+      }
+
+      const paylod = {
+        userId: JSON.parse(window.localStorage.getItem("user")).token.id,
+        articleId: postId,
+        content: content,
+      };
+
+      axios({
+        method: "post",
+        url: "http://localhost:8000/api/review-add",
+        data: paylod,
+      }).then(res => {
+        console.log("评论提交报文打印");
+        console.log(res);
+        if (res) {
+          if (res.code === 200) {
+            // 写入成功以后还需要在 刷新列表数据 ==> ""
+          }
+        }
+      });
+    },
 
     // 获取用户信息
     getUser() {
+      this.userInformation = {};
       this.userInformation = JSON.parse(localStorage.getItem("user")).token;
       console.log(this.userInformation);
     },
@@ -2398,6 +2446,9 @@ export default {
         border-radius: 4px;
         text-align: center;
       }
+    }
+    .comment-item {
+      margin-bottom: 20px;
     }
   }
   .avatar-back {

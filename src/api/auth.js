@@ -5,7 +5,7 @@ const serverBaseUrl = "http://localhost:8000/api";
 export const getLogin = async ({ username, password }) =>
   axios({
     method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
+    // headers: { "content-type": "application/x-www-form-urlencoded" },
     data: { username: username, password: password },
     url: `${serverBaseUrl}/login`,
   });
@@ -14,9 +14,9 @@ export const getLogin = async ({ username, password }) =>
 export const postReg = async ({ username, password }) =>
   axios({
     method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
+    // headers: { "content-type": "application/x-www-form-urlencoded" },
     data: { username: username, password: password },
-    url: "/register",
+    url: `${serverBaseUrl}/register`,
   });
 
 // 获取用户列表

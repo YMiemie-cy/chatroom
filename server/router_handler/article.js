@@ -20,6 +20,9 @@ exports.articlePublish = (req, res) => {
   const userId = req.body.userId;
   const content = req.body.content;
 
+  console.log("invoke article publish ");
+  // console.log("content: " + content);
+
   if (!userId || !content) {
     return res.send({ code: 500, message: "参数不完整" });
   }
@@ -48,7 +51,7 @@ exports.goodInvoke = (req, res) => {
 
       db.query("update t_user set goodCount = goodCount + 1 where id = ?", [userId], (e, r) => {
         if (e) return res.send({ code: 500, msg: "点赞数更新失败" });
-        return res.send({ code: 500, msg: "ok" });
+        return res.send({ code: 200, msg: "ok" });
       });
     }
   });
@@ -57,12 +60,19 @@ exports.goodInvoke = (req, res) => {
 
 /** 点赞 帖子 */
 exports.goodCountForArticle = (req, res) => {
-  const id = req.param.id; // ?id=xxx
-  let sql = "update t_chat_circle set goodCount = ?";
-  db.query(sql, id, (e, r) => {
-    if (e) return res.send(err);
+  const id = req.query.id; // ?id=xxx
+  if (!id) {
+    return res.send({ code: 500, msg: "参数不完整" });
+  }
 
-    if (r.affectedRows !== 1) return res.send(err);
+  let sql = `update t_chat_circle set goodCount = goodCount + 1 where id = ${id};`;
+  db.query(sql, (e, r) => {
+    if (e) {
+      // console.log(e);
+      return res.send(err);
+    }
+
+    if (r.affectedRows != 1) return res.send(err);
 
     return res.send({ code: 200, message: "点赞成功" });
   });
@@ -70,7 +80,7 @@ exports.goodCountForArticle = (req, res) => {
 
 /** 帖子数 */
 exports.articleCount = (req, res) => {
-  const userId = req.param.userId;
+  const userId = req.query.userId;
 
   if (!userId) return res.send({ code: 500, message: "参数不完整" });
 
@@ -101,7 +111,7 @@ exports.articleGoodCount = (req, res) => {
 
 exports.articleCountByUserId = (req, res) => {
   const userId = req.query.userId;
-  console.log(req);
+  // console.log(req);
 
   if (!userId) return res.send({ code: 500, message: "参数不完整" });
 

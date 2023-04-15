@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const router = require("./router");
+const bodyParser = require("body-parser");
 
 const app = express();
 // 挂载跨域中间件
@@ -10,10 +11,17 @@ app.use(cors());
 /**  配置包体解析格式 **/
 
 // 只能解析 application/x-www-form-url-urlencoded
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
 
 // 配置解析json
 app.use(express.json());
+
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//     limit: "50mb",
+//   })
+// );
 
 // 抽离冗余代码
 /**

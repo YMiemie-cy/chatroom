@@ -7,6 +7,12 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
 
+Vue.directive("relative", {
+  inserted: e => {
+    console.log("v-relative", e);
+  },
+});
+
 import router from "./plugins/router.js";
 
 import Vant from "vant";

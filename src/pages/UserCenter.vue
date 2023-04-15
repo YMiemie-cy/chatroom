@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { getLogin } from "../api";
 export default {
   name: "userCenter",
   components: {},
@@ -133,6 +134,9 @@ export default {
     };
 
     return {
+      /** test start */
+
+      /** test end */
       rules: {
         nickname: [{ validator: validateNickname, trigger: "blur" }],
         school: [{ validator: validateSchool, trigger: "blur" }],
@@ -150,15 +154,51 @@ export default {
       this.$emit("closeUserInfo");
     },
     submitForm(formName) {
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     alert("submit!");
-      //     console.log("formName", formName);
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      // 数据写入数据库
+      const userInfoObj = {
+        id: this.userInformation.id,
+        username: JSON.parse(window.localStorage.getItem("user")).token.username,
+        nickname: this.userInformation.nickName,
+        password: JSON.parse(window.localStorage.getItem("user")).token.password,
+        sex: this.userInformation.gender,
+        age: this.userInformation.age,
+        school: this.userInformation.school,
+        major: this.userInformation.specialized,
+        tag: this.userInformation.label,
+        selfTag: this.userInformation.signature,
+        imgUrl: this.userInformation.imgUrl,
+      };
+
+      axios({
+        url: "http://localhost:8000/api/update",
+        data: userInfoObj,
+        method: "post",
+      })
+        .then(async res => {
+          if (res.data.code === 200) {
+            /** 更新localstroage user数据 */
+            const res2 = await getLogin({
+              username: JSON.parse(window.localStorage.getItem("user")).token.username,
+              password: JSON.parse(window.localStorage.getItem("user")).token.password,
+            });
+
+            if (res2.data.code === 200) {
+              const obj = {
+                username: JSON.parse(window.localStorage.getItem("user")).token.username,
+                token: res2.data.data,
+              };
+              localStorage.removeItem("user");
+              localStorage.setItem("user", JSON.stringify(obj));
+            }
+            console.log("update success");
+            /** 更新localstroage user数据 */
+          } else {
+            console.log(res);
+            console.log("err");
+          }
+        })
+        .catch(e => console.log(e));
+
       this.$emit("update:userInformation", this.userInformation);
       this.close();
     },

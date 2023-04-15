@@ -4,6 +4,7 @@ const db = require("../db");
 
 // 更新
 exports.userUpdate = (req, res) => {
+  const id = req.body.id;
   const username = req.body.username;
   const password = req.body.password;
   const nickname = req.body.nickname;
@@ -15,12 +16,14 @@ exports.userUpdate = (req, res) => {
   const selfTag = req.body.selfTag;
   const imgUrl = req.body.imgUrl;
 
+  // console.log(imgUrl);
+
   let sql =
-    "update t_user set username=?, password=?, nickname=?, sex=?, age=?, school=?, major=?, tag=?, selfTag=?, imgUrl=?";
+    "update t_user set username=?, password=?, nickname=?, sex=?, age=?, school=?, major=?, tag=?, selfTag=?, imgUrl=? where id = ?";
 
   db.query(
     sql,
-    [username, password, nickname, sex, age, school, major, tag, selfTag, imgUrl],
+    [username, password, nickname, sex, age, school, major, tag, selfTag, imgUrl, id],
     (err, result) => {
       if (err) return res.send({ code: 500, message: "失败" });
 
@@ -90,10 +93,20 @@ exports.login = (req, res) => {
         return res.send({ code: 500, message: "sql执行异常" });
       }
       if (result.length !== 1) {
-        console.log(result);
+        // console.log(result);
         return res.send({ code: 500, message: "用户名或密码错误" });
       }
       return res.send({ code: 200, message: "登录成功", data: result[0] });
     }
   );
+};
+
+exports.userList = (req, res) => {
+  const sql = "select * from t_user";
+
+  db.query(sql, (e, r) => {
+    if (e) return res.send({ code: 500, message: "sql exec err" });
+
+    return res.send({ code: 200, message: "ok", data: r });
+  });
 };
