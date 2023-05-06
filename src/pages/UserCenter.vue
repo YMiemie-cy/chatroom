@@ -12,7 +12,7 @@
           class="demo-ruleForm"
         >
           <el-form-item label="昵称" prop="nickname">
-            <el-input v-model="userInformation.nickName" autocomplete="off"></el-input>
+            <el-input v-model="userInformation.nickname" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="学校" prop="school">
@@ -20,7 +20,7 @@
           </el-form-item>
 
           <el-form-item label="专业" prop="specialized">
-            <el-input v-model="userInformation.specialized" autocomplete="off"></el-input>
+            <el-input v-model="userInformation.major" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="年龄" prop="age">
@@ -28,15 +28,15 @@
           </el-form-item>
 
           <el-form-item label="性别" prop="gender">
-            <el-input v-model="userInformation.gender" autocomplete="off"></el-input>
+            <el-input v-model="userInformation.sex" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="个人标签" prop="label">
-            <el-input v-model="userInformation.label" autocomplete="off"></el-input>
+            <el-input v-model="userInformation.tag" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="个性签名" prop="signature">
-            <el-input v-model="userInformation.signature" autocomplete="off"></el-input>
+            <el-input v-model="userInformation.selfTag" autocomplete="off"></el-input>
           </el-form-item>
 
           <div class="avatar-upload">
@@ -70,7 +70,7 @@ export default {
   name: "userCenter",
   components: {},
   mounted() {
-    console.log("xxxxxxxxxxxx", this.userInformation);
+    console.log("xxxxxxxxxxxx", JSON.parse(window.localStorage.getItem("user")).token.id);
   },
   props: {
     userInformation: {
@@ -156,16 +156,16 @@ export default {
     submitForm(formName) {
       // 数据写入数据库
       const userInfoObj = {
-        id: this.userInformation.id,
+        id: JSON.parse(window.localStorage.getItem("user")).token.id,
         username: JSON.parse(window.localStorage.getItem("user")).token.username,
-        nickname: this.userInformation.nickName,
+        nickname: this.userInformation.nickname,
         password: JSON.parse(window.localStorage.getItem("user")).token.password,
-        sex: this.userInformation.gender,
+        sex: this.userInformation.sex,
         age: this.userInformation.age,
         school: this.userInformation.school,
-        major: this.userInformation.specialized,
-        tag: this.userInformation.label,
-        selfTag: this.userInformation.signature,
+        major: this.userInformation.major,
+        tag: this.userInformation.tag,
+        selfTag: this.userInformation.selfTag,
         imgUrl: this.userInformation.imgUrl,
       };
 

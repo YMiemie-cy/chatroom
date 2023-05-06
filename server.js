@@ -49,18 +49,6 @@ io.on("connection", socket => {
     socket.broadcast.emit("user-joined", user);
   });
 
-  // // 当有用户发送消息时触发
-  // socket.on("message", message => {
-  //   console.log("New message:", message);
-
-  //   // // // 查找指定的socket连接对象
-  //   // const targetSocket = io.sockets.connected[message.toUserId];
-  //   // console.log("xxxxx", targetSocket);
-
-  //   // 将消息广播给所有在线用户（除了发送者）
-  //   socket.broadcast.emit("message", message);
-  // });
-
   // 处理客户端发送的私聊消息
   socket.on("private-message", ({ to, message }) => {
     // 向指定的客户端发送私聊消息
@@ -72,6 +60,18 @@ io.on("connection", socket => {
     //   // 将消息广播给所有在线用户（除了发送者）
     socket.broadcast.emit("message", message, socket.id);
   });
+
+  // // 当有用户发送消息时触发
+  // socket.on("message", message => {
+  //   console.log("New message:", message);
+
+  //   // // // 查找指定的socket连接对象
+  //   // const targetSocket = io.sockets.connected[message.toUserId];
+  //   // console.log("xxxxx", targetSocket);
+
+  //   // 将消息广播给所有在线用户（除了发送者）
+  //   socket.broadcast.emit("message", message);
+  // });
 
   // 当有用户断开连接时触发
   socket.on("disconnect", () => {

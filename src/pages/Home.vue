@@ -228,7 +228,11 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img class="avatar-img rounded-2" src="../assets/img/07.jpg" alt="" />
+                <img
+                  class="avatar-img rounded-2"
+                  :src="userInformation.imgUrl === '' ? src : userInformation.imgUrl"
+                  alt=""
+                />
               </a>
               <ul
                 class="dropdown-menu dropdown-animation dropdown-menu-end pt-3 small me-md-n3"
@@ -374,22 +378,19 @@
                         <div class="hstack gap-2 gap-xl-3 justify-content-center">
                           <!-- User stat item -->
                           <div>
-                            <h6 class="mb-0">{{ userInformation.post }}</h6>
+                            <h6 class="mb-0">
+                              {{ userInformation.post }}
+                            </h6>
                             <small>评论数</small>
                           </div>
                           <!-- Divider -->
                           <div class="vr"></div>
                           <!-- User stat item -->
                           <div>
-                            <h6 class="mb-0">{{ userInformation.like }}</h6>
+                            <h6 class="mb-0">
+                              {{ userInformation.like }}
+                            </h6>
                             <small>被赞数</small>
-                          </div>
-                          <!-- Divider -->
-                          <div class="vr"></div>
-                          <!-- User stat item -->
-                          <div>
-                            <h6 class="mb-0">{{ userInformation.comments }}</h6>
-                            <small>评论数</small>
                           </div>
                         </div>
                         <!-- User stat END -->
@@ -445,12 +446,6 @@
                     <!-- Card footer -->
                   </div>
                   <!-- Card END -->
-
-                  <!-- Copyright -->
-                  <p class="small text-center mt-1">
-                    ©2022
-                    <a class="text-body" href="/">Webestica</a>
-                  </p>
                 </div>
               </div>
             </nav>
@@ -469,7 +464,11 @@
                 <!-- Avatar -->
                 <div class="avatar avatar-xs me-2">
                   <a href="#">
-                    <img class="avatar-img rounded-circle" src="../assets/img/03.jpg" alt="" />
+                    <img
+                      class="avatar-img rounded-circle"
+                      :src="userInformation.imgUrl === '' ? src : userInformation.imgUrl"
+                      alt=""
+                    />
                   </a>
                 </div>
                 <!-- Post input -->
@@ -509,8 +508,13 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <!-- 遍历用户数组 比对帖子id<userId>和用户id<id>是否相同如果相同就显示 -->
 
-                  <div class="user-wrapper" v-for="userItem in userList" :key="userItem.id">
-                    <div v-if="postItem.userId == userItem.id" class="d-flex align-items-center">
+                  <div
+                    class="user-wrapper"
+                    v-for="userItem in userList"
+                    :key="userItem.id"
+                    v-if="postItem.userId == userItem.id"
+                  >
+                    <div class="d-flex align-items-center">
                       <!-- Avatar -->
                       <div class="avatar avatar-story me-2">
                         <a href="#!">
@@ -598,7 +602,7 @@
                       data-autoresize=""
                       class="form-control pe-4 bg-light commentText"
                       rows="1"
-                      placeholder="Add a comment..."
+                      placeholder="新增评论..."
                     ></textarea>
 
                     <a
@@ -2021,7 +2025,7 @@ export default {
         // imgUrl: "",
       },
       news: [],
-      src: require("../assets/img/07.jpg"),
+      src: require("../assets/img/placeholder.jpg"),
     };
   },
   components: {
@@ -2033,17 +2037,14 @@ export default {
     const res = await getNews();
     this.news = res.data.T1348647853363[0].ads;
   },
-  updated() {
-    // this.init();
-  },
+
   methods: {
     /** 点赞 */
     likedHandler(id) {
       axios({
         url: "http://localhost:8000/api/post-good-add?id=" + id,
       }).then(res => {
-        if (res.code === 200) {
-          console.log("点赞成功");
+        if (res.data.code === 200) {
           // 页面刷新
           this.getPostList();
         }
@@ -2060,26 +2061,25 @@ export default {
           if (res) {
             console.log(res);
             this.postList = [];
-            this.postList = res.data.data;
+            // this.postList = res.data.data;
+            console.log("zzzzzzzzzzz", res.data.data);
+            this.$set(this, "postList", res.data.data);
             const tmp = res.data.data;
             // const target = [];
-
             for (let index = 0; index < tmp.length; index++) {
               // 动态添加属性 reviewContent
               this.postList[index].reviewContent = "";
-
               console.log(tmp[index].id);
-
               /** 请求文章发布数 */
               axios({
                 url: `http://localhost:8000/api/review-all-count-by-aid?postId=${tmp[index].id}`,
               }).then(res => {
-                console.log(res);
-                console.log("count: " + res.data.data[0].articleCount);
-
                 const mid = tmp[index];
-                mid.reviewCount = res.data.data[0].articleCount;
-
+                if (res.data.data.length === 0) {
+                  mid.reviewCount = 0;
+                } else {
+                  mid.reviewCount = res.data.data[0].articleCount;
+                }
                 /** 请求文章评论列表 */
                 axios({
                   url: `http://localhost:8000/api/review-list-by-post-id?postId=${tmp[index].id}`,
@@ -2132,6 +2132,8 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             console.log("成功");
+            this.content = "";
+            this.getPostList();
           } else console.log(res);
         })
         .catch(e => console.log(e));
@@ -2187,8 +2189,9 @@ export default {
         console.log("评论提交报文打印");
         console.log(res);
         if (res) {
-          if (res.code === 200) {
+          if (res.data.code === 200) {
             // 写入成功以后还需要在 刷新列表数据 ==> ""
+            this.getPostList();
           }
         }
       });
@@ -2226,8 +2229,9 @@ export default {
     },
 
     // 获取用户发布帖子数
-    async totalPosts(userId) {
-      const res = await getACount(1);
+    async totalPosts() {
+      let userId = JSON.parse(localStorage.getItem("user")).token.id;
+      const res = await getACount(userId);
       if (res.data.code === 200) {
         console.log("获取用户发布帖子数", res.data.data[0].count);
         this.userInformation.post = res.data.data[0].count;
@@ -2237,11 +2241,16 @@ export default {
     },
 
     // 获取用户被点赞数
-    async numberOfLikes(userId) {
-      const res = await getGCount(1);
+    async numberOfLikes() {
+      let userId = JSON.parse(localStorage.getItem("user")).token.id;
+      const res = await getGCount(userId);
       if (res.data.code === 200) {
         console.log("获取用户被点赞数", res.data.data[0].count);
-        this.userInformation.like = res.data.data[0].count;
+        if (res.data.data[0].count === null) {
+          this.userInformation.like = 0;
+        } else {
+          this.userInformation.like = res.data.data[0].count;
+        }
       } else {
         console.log("列表页请求失败g-count");
       }

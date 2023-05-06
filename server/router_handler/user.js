@@ -19,7 +19,7 @@ exports.userUpdate = (req, res) => {
   // console.log(imgUrl);
 
   let sql =
-    "update t_user set username=?, password=?, nickname=?, sex=?, age=?, school=?, major=?, tag=?, selfTag=?, imgUrl=? where id = ?";
+    "update chat_room.t_user set username=?, password=?, nickname=?, sex=?, age=?, school=?, major=?, tag=?, selfTag=?, imgUrl=? where id = ?";
 
   db.query(
     sql,

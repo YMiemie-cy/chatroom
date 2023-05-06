@@ -26,5 +26,19 @@ let router = new VueRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  let token = window.localStorage.getItem("user");
+  // 守卫业务
+  console.log(to);
+  if (to.path === "/home" && token) {
+    //判断是不是登录了
+    next();
+  } else if (to.path === "/login") {
+    next();
+  } else {
+    next("/login");
+  }
+});
+
 // 导出路由实例，让他去控制vue根
 export default router;

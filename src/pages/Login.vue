@@ -136,10 +136,10 @@ export default {
       });
       
       if(res.data.code === 200){
-
+        localStorage.removeItem("user");
         const obj = {username: this.loginList.username,token: res.data.data};
         localStorage.setItem("user",JSON.stringify(obj));
-     
+        this.$router.push('/home');
         this.loginList.username = "";
         this.loginList.password = "";
       }

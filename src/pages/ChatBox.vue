@@ -12,7 +12,7 @@
               @click="pick($event, index)"
               :class="activeIndex == index ? 'active' : ''"
             >
-              <img src="../assets/images/default-avatar.png" data-src="" />
+              <img :src="user.imgUrl ? user.imgUrl : src" data-src="" />
               <p>{{ user.name }}</p>
             </li>
           </ul>
@@ -48,6 +48,7 @@ export default {
   props: ["userInformation"],
   data() {
     return {
+      src: require("../assets/img/placeholder.jpg"),
       users: [
         {
           id: "",
@@ -73,7 +74,7 @@ export default {
   },
   created() {
     this.currentUser = {
-      name: this.userInformation.nickName,
+      name: this.userInformation.nickname,
       imgUrl: this.userInformation.imgUrl,
     };
   },
@@ -98,6 +99,7 @@ export default {
       console.log("New user joined:", user);
 
       this.users.push(user);
+      this.getOnlineUsers();
     });
 
     // 监听用户离开事件
@@ -120,7 +122,7 @@ export default {
 
       const text = `
             <div class="recMessages">
-              ${message.message.content}: 
+              ${message.message.content}:
               <strong>${message.message.sender}</strong>
             </div>
       `;
